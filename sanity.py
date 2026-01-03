@@ -16,4 +16,13 @@ if __name__ == '__main__':
 
     stockfish.set_fen_position(board.fen())
 
-    print(stockfish.get_evaluation())
+    eval = stockfish.get_evaluation()['value']
+
+    if eval < 0:  # white perspective
+        print("Stockfish Absolute Scoring")
+
+    elif eval > 0:
+        print("Stockfish Relative Scoring")
+
+    else:
+        print("Error")
