@@ -35,7 +35,7 @@ class surprisal:
                 if i['Move'] == uci_move:
                     Ei = self.get_centipawn(i)
 
-            # If black to move, negate centipawn evals to switch to relative perspective.
+            # If black to move, negate centipawn evals to switch to relative perspective. ONLY IF STOCKFISH USES ABSOLUTE SCORING
             if not white_to_move:
                 Ei = -Ei
                 evals = [-i for i in evals]
