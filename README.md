@@ -1,2 +1,2 @@
 # Chess-Surprisal
-Calculate surprisal in bits from chess pgn
+WORK IN PROGRESS, APART OF RESEARCH PAPER
