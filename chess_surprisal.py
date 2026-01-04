@@ -2,20 +2,22 @@ from stockfish import Stockfish
 from dotenv import load_dotenv
 import numpy as np
 import chess
+import os
 
 
-class surprisal:
-    def __init__(self, stockfish: Stockfish, san_moves: list, delta0: int, info: bool):
+class chess_surprisal:
+    def __init__(self, stockfish: Stockfish, san_moves: list, delta0: int):
         self.stockfish = stockfish
         self.san_moves = san_moves
         self.delta0 = delta0
-        self.info = info
 
-    def calculate_surprisal(self):
+    def calculate_surprisal(self, info=False, absolute_scoring=False):
         board = chess.Board()
         self.stockfish.set_fen_position(board.fen())
 
         probabilities = []
+
+        # iterate through each chess move
         for i in range(len(self.san_moves)):
             white_to_move: bool = board.turn
             move = self.san_moves[i]
@@ -36,7 +38,7 @@ class surprisal:
                     Ei = self.get_centipawn(i)
 
             # If black to move, negate centipawn evals to switch to relative perspective. ONLY IF STOCKFISH USES ABSOLUTE SCORING
-            if not white_to_move:
+            if absolute_scoring and not white_to_move:
                 Ei = -Ei
                 evals = [-i for i in evals]
 
@@ -46,7 +48,7 @@ class surprisal:
 
             probabilities.append(move_probability)
 
-            if self.info:
+            if info:
                 print(
                     f"Best Move: {legal_moves[0]['Move']} at eval {evals[0]}")
                 print(f"Played Move: {move} at eval {Ei}")
@@ -101,15 +103,14 @@ class surprisal:
 
 
 if __name__ == '__main__':
-    stockfish = Stockfish(
-        path=r"C:\Users\LegoB\Desktop\Cybersicherheit\VSCode\stockfish-windows-x86-64-avx2\stockfish\stockfish-windows-x86-64-avx2.exe")
+    load_dotenv()
 
-    stockfish.set_depth(15)
+    stockfish_path = os.getenv('STOCKFISH_PATH')
 
-    moves = ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'Nf3', 'c5', 'g3', 'cxd4', 'Nxd4', 'Ne4', 'Qc2', 'Nxc3', 'bxc3', 'Be7', 'Bg2', 'O-O', 'O-O', 'a6', 'Rd1', 'Qc7', 'Qb3', 'd6', 'Be3', 'Nd7', 'Rab1', 'Rb8', 'Qc2', 'Nc5', 'Nb3', 'b6', 'Nxc5', 'bxc5', 'Rxb8', 'Qxb8', 'Rb1', 'Qc7', 'Qa4', 'Bf6', 'Rb3',
-                   'h6', 'Qc6', 'Qxc6', 'Bxc6', 'Bd8', 'Bf4', 'Bc7', 'Bb7', 'g5', 'Be3', 'Bd7', 'Bf3', 'Bc8', 'Bb7', 'Bd7', 'Bxa6', 'Ra8', 'Rb7', 'Rxa6', 'Rxc7', 'Ba4', 'h4', 'gxh4', 'gxh4', 'Kg7', 'Rb7', 'Bd1', 'Rb2', 'Ra4', 'Rd2', 'Rxc4', 'Rxd1', 'd5', 'Ra1', 'Rxc3', 'a4', 'd4', 'a5', 'dxe3', 'a6', 'exf2+', 'Kxf2']
+    stockfish = Stockfish(path=stockfish_path)
 
-    obj = surprisal(
-        stockfish, moves, 10, True)
+    stockfish.set_depth(12)
 
-    print(obj.calculate_surprisal())
+    surprisal_calculator = chess_surprisal(stockfish, ['e4', 'e5'], 10)
+
+    print(surprisal_calculator.calculate_surprisal(True))
