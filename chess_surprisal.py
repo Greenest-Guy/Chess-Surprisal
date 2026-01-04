@@ -27,20 +27,21 @@ class chess_surprisal:
 
             # Gets the centipawn evaluation of all legal moves.
             evals = []
-            for i in legal_moves:
-                evals.append(self.get_centipawn(i))
+            for j in legal_moves:
+                evals.append(self.get_centipawn(j))
 
             # Gets the centipawn value of Ei (played move) from all legal moves.
             uci_move = board.parse_san(move).uci()
 
-            for i in legal_moves:
-                if i['Move'] == uci_move:
-                    Ei = self.get_centipawn(i)
+            for j in legal_moves:
+                if j['Move'] == uci_move:
+                    Ei = self.get_centipawn(j)
+                    break
 
             # If black to move, negate centipawn evals to switch to relative perspective. ONLY IF STOCKFISH USES ABSOLUTE SCORING
             if absolute_scoring and not white_to_move:
                 Ei = -Ei
-                evals = [-i for i in evals]
+                evals = [-j for j in evals]
 
             # Calculates softmax probability.
             move_probability = self.softmax_probability_all(
@@ -111,6 +112,6 @@ if __name__ == '__main__':
 
     stockfish.set_depth(12)
 
-    surprisal_calculator = chess_surprisal(stockfish, ['e4', 'e5'], 10)
+    surprisal_calculator = chess_surprisal(stockfish, ['e4', 'e5'], 100)
 
     print(surprisal_calculator.calculate_surprisal(True))
