@@ -1,7 +1,7 @@
 # Chess Surprisal
 Code utilizing information theory to calculate the surprisal (self-information) of a chess game, derived from Stockfish evaluations.
 
-Note that this repository is meant to serve as demonstration code for an independent research paper: *Quantifying the Impact of Time Pressure on Human Unpredictability Through the Self-Information of Chess*.
+Note that this repository is meant to serve as demonstration code for an independent research paper: "*Quantifying the Impact of Time Pressure on Human Unpredictability Through the Self-Information of Chess*".
 
 ## Probability Framework
 
