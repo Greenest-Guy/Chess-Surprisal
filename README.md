@@ -3,6 +3,8 @@ Code utilizing information theory to calculate the surprisal (self-information) 
 
 Note that this repository is intended to serve as demonstration code for an independent research paper: "*Quantifying the Degradation of Human Decision-Making Under Time Pressure Through the Self-Information of Chess*".
 
+[Check out the paper here!](https://zenodo.org/records/18664813)
+
 ## Probability Framework
 
 <p align="center">
